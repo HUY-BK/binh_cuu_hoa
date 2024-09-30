@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web Hiển Thị Dữ Liệu</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f8ff;
+            color: #333;
+            text-align: center;
+            padding: 20px;
+        }
+
+        h2 {
+            color: #2c3e50;
+        }
+
+        .container {
+            display: inline-block;
+            border: 1px solid #ccc;
+            padding: 20px;
+            border-radius: 10px;
+            background-color: #fff;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            margin: 20px auto;
+            width: 60%;
+        }
+
+        .data-block {
+            margin: 20px 0;
+            text-align: left;
+        }
+
+        .data-block p {
+            margin: 10px 0;
+        }
+
+        .data-block span {
+            font-weight: bold;
+            color: #2980b9;
+        }
+
+        #vanData, #bnoData {
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>ESP32 Web: Hiển Thị Dữ Liệu</h1>
+
+        <div class="data-block">
+            <h2>Độ mở van và thời gian mở van</h2>
+            <div id="vanData">Đang chờ dữ liệu...</div>
+        </div>
+
+        <div class="data-block">
+            <h2>Dữ Liệu BNO055</h2>
+            <p>Gia tốc x: <span id="tx">0</span> (m/s<sup>2</sup>)</p>
+            <p>Gia tốc y: <span id="ty">0</span> (m/s<sup>2</sup>)</p>
+            <p>Gia tốc z: <span id="tz">0</span> (m/s<sup>2</sup>)</p>
+
+            <p>Góc x: <span id="gx">0</span>&deg</p>
+            <p>Góc y: <span id="gy">0</span>&deg</p>
+            <p>Góc z: <span id="gz">0</span>&deg</p>
+        </div>
+    </div>
+    <script>
+        if(window.EventSource){
+          var source = new EventSource('/events');
+          source.addEventListener('open', function (e) {
+              console.log("Events Connected");
+          }, false);
+          source.addEventListener('error',function(e){
+              if(e.target.readyState != EventSource.OPEN){
+                  console.log("Events Disconnected");
+              }
+          },false);
+          source.addEventListener('giaToc.x',function(e){
+             console.log("GiaToc.x", e.data);
+             document.getElementById("tx").innerHTML=e.data;
+          },false);
+          source.addEventListener('giaToc.y',function(e){
+             console.log("GiaToc.y", e.data);
+             document.getElementById("ty").innerHTML=e.data;
+          },false);
+          source.addEventListener('giaToc.z',function(e){
+             console.log("GiaToc.z", e.data);
+             document.getElementById("tz").innerHTML=e.data;
+          },false);
+          source.addEventListener('goc.x',function(e){
+             console.log("goc.x", e.data);
+             document.getElementById("gx").innerHTML=e.data;
+          },false);
+          source.addEventListener('goc.y',function(e){
+             console.log("goc.y", e.data);
+             document.getElementById("gy").innerHTML=e.data;
+          },false);
+          source.addEventListener('goc.z',function(e){
+             console.log("goc.z", e.data);
+             document.getElementById("gz").innerHTML=e.data;
+          },false);
+          source.addEventListener('van',function(e){
+             console.log("van", e.data);
+             document.getElementById("vanData").innerHTML=e.data;
+          },false);
+
+      }
+
+  </script>
+
+   
+
+</body>
+</html>
