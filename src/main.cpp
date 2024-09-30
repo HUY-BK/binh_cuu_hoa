@@ -1,10 +1,14 @@
 #include <Arduino.h>
+<<<<<<< HEAD
 
+=======
+>>>>>>> 562868530a006d4b77050bf9cc8f3584f64a69ad
 #include <WiFi.h>
 #include <Adafruit_Sensor.h>
 #include <Adafruit_BNO055.h>
 #include <PubSubClient.h>
 #include <ArduinoJson.h>
+<<<<<<< HEAD
 #include <SPI.h>
 #include <ESPAsyncWebServer.h>
 
@@ -135,6 +139,12 @@ AsyncEventSource events("/events");
 #define LED 2
 
 #define bienTro 32
+=======
+ #include <SPI.h>
+
+
+#define bienTro 16
+>>>>>>> 562868530a006d4b77050bf9cc8f3584f64a69ad
 
 #define nutAn 23
 
@@ -143,10 +153,17 @@ unsigned long lastTime = 0, startTime = 0;
 const char *ssid = "Tom Dong Bich";
 const char *password = "hi09082015";
 
+<<<<<<< HEAD
 #define MQTT_SERVER "mqtt-dashboard.com"
 #define MQTT_PORT 1883
 
 #define MQTT_TOPIC "devID/valve"
+=======
+#define MQTT_SERVER "broker.hivemq.com"
+#define MQTT_PORT 1883
+
+#define MQTT_TOPIC "devID\valve"
+>>>>>>> 562868530a006d4b77050bf9cc8f3584f64a69ad
 
 WiFiClient wifiClient;
 PubSubClient client(wifiClient);
@@ -161,8 +178,11 @@ void setWiFi()
     delay(500);
     Serial.println("...");
   }
+<<<<<<< HEAD
   
   Serial.println(WiFi.localIP());
+=======
+>>>>>>> 562868530a006d4b77050bf9cc8f3584f64a69ad
 }
 void setBNO055()
 {
@@ -190,7 +210,11 @@ void connect_to_broker()
     clientId += String(random(0xffff), HEX);
     if (client.connect(clientId.c_str()))
     {
+<<<<<<< HEAD
       Serial.println("MQTT Connected");
+=======
+      Serial.println("NQTT Connected");
+>>>>>>> 562868530a006d4b77050bf9cc8f3584f64a69ad
       client.subscribe(MQTT_TOPIC);
     }
     else
@@ -204,11 +228,16 @@ int giatri_bienTro = 0;
 void read_bienTro()
 {
   giatri_bienTro = map(analogRead(bienTro), 0, 4095, 0, 100);
+<<<<<<< HEAD
   digitalWrite(LED, analogRead(bienTro));
+=======
+  
+>>>>>>> 562868530a006d4b77050bf9cc8f3584f64a69ad
 }
 double tx, ty, tz, gx, gy, gz;
 void readBNO055()
 {
+<<<<<<< HEAD
   tx = -1000000, ty = -1000000, tz = -1000000, gx = -1000000, gy = -1000000, gz = -1000000;
   sensors_event_t accelerometerData, orientationData;
   bno.getEvent(&accelerometerData, Adafruit_BNO055::VECTOR_ACCELEROMETER);
@@ -228,6 +257,20 @@ void readBNO055()
   events.send(String(gz).c_str(), "goc.z", millis());
 }
 
+=======
+  tx=-1000000,ty=-1000000,tz=-1000000, gx=-1000000,gy=-1000000,gz=-1000000;
+  sensors_event_t accelerometerData, orientationData;
+  bno.getEvent(&accelerometerData, Adafruit_BNO055::VECTOR_ACCELEROMETER);
+  bno.getEvent(&orientationData, Adafruit_BNO055::VECTOR_EULER);
+  tx =accelerometerData.acceleration.x;
+  ty =accelerometerData.acceleration.y;
+  tz =accelerometerData.acceleration.z;
+  gx = orientationData.orientation.x;
+  gy =orientationData.orientation.y;
+  gz = orientationData.orientation.z;
+
+}
+>>>>>>> 562868530a006d4b77050bf9cc8f3584f64a69ad
 void setup()
 {
   Serial.begin(9600);
@@ -236,6 +279,7 @@ void setup()
   connect_to_broker();
   setBNO055();
   pinMode(bienTro, INPUT);
+<<<<<<< HEAD
   pinMode(LED, OUTPUT);
   pinMode(nutAn, INPUT_PULLUP);
   server.on("/", HTTP_GET, [](AsyncWebServerRequest *request)
@@ -258,6 +302,22 @@ void loop()
 
     if (millis() - lastTime >= 100)
     {
+=======
+  pinMode(nutAn, INPUT_PULLUP);
+  esp_sleep_enable_ext0_wakeup(GPIO_NUM_23, 0);
+}
+int count = 0;
+void loop()
+{
+ if (!client.connected()) {
+    connect_to_broker();
+  }
+  client.loop();
+
+  if (digitalRead(nutAn) == 0)
+  {
+    if(millis()- lastTime >= 100){
+>>>>>>> 562868530a006d4b77050bf9cc8f3584f64a69ad
       read_bienTro();
       lastTime = millis();
     }
@@ -266,8 +326,11 @@ void loop()
     if ((giatri_bienTro == 0) && (count == 0))
     {
       client.publish(MQTT_TOPIC, "Van Đóng");
+<<<<<<< HEAD
       events.send("Van Đóng", "van", millis());
       //Serial.print("Van dong");
+=======
+>>>>>>> 562868530a006d4b77050bf9cc8f3584f64a69ad
       count = 1;
     }
     else if (giatri_bienTro != 0)
@@ -276,13 +339,17 @@ void loop()
       {
         startTime = millis();
       }
+<<<<<<< HEAD
 
+=======
+>>>>>>> 562868530a006d4b77050bf9cc8f3584f64a69ad
       JsonDocument doc;
       doc["f"] = giatri_bienTro;
       doc["t"] = millis() - startTime;
 
       char jsonBuffer[512];
       serializeJson(doc, jsonBuffer);
+<<<<<<< HEAD
       if (millis() - lastTime1 >= 500)
       {
         Serial.println(jsonBuffer);
@@ -292,10 +359,20 @@ void loop()
 
       }
 
+=======
+      if(millis()- lastTime >= 500){
+      client.publish(MQTT_TOPIC, jsonBuffer);
+      }
+      
+>>>>>>> 562868530a006d4b77050bf9cc8f3584f64a69ad
       count = 0;
     }
   }
   else
   {
+<<<<<<< HEAD
+=======
+    esp_deep_sleep_start();
+>>>>>>> 562868530a006d4b77050bf9cc8f3584f64a69ad
   }
 }
