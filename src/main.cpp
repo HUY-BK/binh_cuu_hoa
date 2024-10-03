@@ -119,25 +119,18 @@ const char index_html[] PROGMEM = R"rawliteral(
              console.log("van", e.data);
              document.getElementById("vanData").innerHTML=e.data;
           },false);
-
       }
-
   </script>
-
-   
-
 </body>
 </html>
 )rawliteral";
+
 
 AsyncWebServer server(80);
 AsyncEventSource events("/events");
 
 #define LED 2
-
 #define bienTro 32
-
-
 #define nutAn 23
 
 unsigned long lastTime = 0, startTime = 0;
@@ -164,7 +157,6 @@ void setWiFi()
     Serial.println("...");
   }
 
-  
   Serial.println(WiFi.localIP());
 
 }
@@ -210,7 +202,6 @@ int giatri_bienTro = 0;
 void read_bienTro()
 {
   giatri_bienTro = map(analogRead(bienTro), 0, 4095, 0, 100);
-
   digitalWrite(LED, analogRead(bienTro));
 
 }
@@ -252,24 +243,9 @@ void setup()
   server.addHandler(&events);
   server.begin();
 }
-int count = 0; unsigned long lastTime1 = 0;
-void loop()
-{
+int count = 0; 
+unsigned long lastTime1 = 0;
 
-  if (!client.connected())
-  {
-    connect_to_broker();
-  }
-   client.loop();
-
-  if (digitalRead(nutAn) == 0)
-  {
-
-    if (millis() - lastTime >= 100)
-    {
-
-}
-int count = 0;
 void loop()
 {
  if (!client.connected()) {
