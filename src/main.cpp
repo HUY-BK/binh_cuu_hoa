@@ -245,7 +245,6 @@ void setup()
   connect_to_broker();
   setBNO055();
   pinMode(bienTro, INPUT);
-
   pinMode(LED, OUTPUT);
   pinMode(nutAn, INPUT_PULLUP);
   server.on("/", HTTP_GET, [](AsyncWebServerRequest *request)
@@ -281,7 +280,6 @@ void loop()
   if (digitalRead(nutAn) == 0)
   {
     if(millis()- lastTime >= 100){
->>>>>>> 562868530a006d4b77050bf9cc8f3584f64a69ad
       read_bienTro();
       lastTime = millis();
     }
@@ -290,11 +288,7 @@ void loop()
     if ((giatri_bienTro == 0) && (count == 0))
     {
       client.publish(MQTT_TOPIC, "Van Đóng");
-<<<<<<< HEAD
       events.send("Van Đóng", "van", millis());
-      //Serial.print("Van dong");
-=======
->>>>>>> 562868530a006d4b77050bf9cc8f3584f64a69ad
       count = 1;
     }
     else if (giatri_bienTro != 0)
@@ -303,17 +297,13 @@ void loop()
       {
         startTime = millis();
       }
-<<<<<<< HEAD
-
-=======
->>>>>>> 562868530a006d4b77050bf9cc8f3584f64a69ad
       JsonDocument doc;
       doc["f"] = giatri_bienTro;
       doc["t"] = millis() - startTime;
 
       char jsonBuffer[512];
       serializeJson(doc, jsonBuffer);
-<<<<<<< HEAD
+
       if (millis() - lastTime1 >= 500)
       {
         Serial.println(jsonBuffer);
@@ -323,20 +313,11 @@ void loop()
 
       }
 
-=======
-      if(millis()- lastTime >= 500){
-      client.publish(MQTT_TOPIC, jsonBuffer);
-      }
-      
->>>>>>> 562868530a006d4b77050bf9cc8f3584f64a69ad
       count = 0;
     }
   }
   else
   {
-<<<<<<< HEAD
-=======
-    esp_deep_sleep_start();
->>>>>>> 562868530a006d4b77050bf9cc8f3584f64a69ad
+
   }
 }
